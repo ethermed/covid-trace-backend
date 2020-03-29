@@ -30,5 +30,7 @@ urlpatterns = [
 
     path(r'v1/people', views.show_all_people),
 
-    path(r'v1/status/<str:status>/id/<str:identifier>/', views.update_status)
+    path(r'v1/status/<str:status>/id/<str:identifier>/', views.update_status),
+
+    path(r'v1/analyze-at-risk/id/<str:identifier>/', views.analyze_at_risk)
 ]

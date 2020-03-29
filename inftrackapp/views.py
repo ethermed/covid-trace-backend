@@ -145,4 +145,25 @@ def update_status(request, status, identifier):
     else:
         return api_json.response_error_not_found("status value is not a valid status")
 
-# v1
+
+def analyze_at_risk(request, identifier):
+    trackable_people = models.TrackablePerson.objects.all()
+    increment = randrange(10)+1 #random value from 1-10
+
+    risk = round(random.random(), 2) #random float with 2 decimal places from 0.0 to 1.0
+
+    people_list = []
+    count = 0
+    for person in trackable_people:
+        if count < 10 and count % increment == 0:
+            person_dict = {
+                "firstname": person.firstname,
+                "lastname": person.lastname,
+                "id": person.unique_id,
+                "risk": risk,
+                "status": person.status
+            }
+            people_list.append(person_dict)
+            count += 1
+
+    return api_json.response_success_with_list(people_list)
