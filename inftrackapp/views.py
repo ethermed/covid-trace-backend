@@ -43,11 +43,10 @@ def show_people_by_role(request, role):
     #comma delimited roles or one role
     role_value = role
 
-    if role_value not in models.ROLE_CHECK:
-        return api_json.response_error_not_found("the value is not a valid role")
-
     #handling one role
     if ',' not in role_value:
+        if role_value not in models.ROLE_CHECK:
+            return api_json.response_error_not_found("the value is not a valid role")
         trackable_people = models.TrackablePerson.objects.filter(role=role_value)
     else:
         #handling multiple roles
@@ -74,10 +73,10 @@ def show_people_by_status(request, status):
     #comma delimited statuses or one statuses
     status_value = status
 
-    if status_value not in models.STATUS_CHECK:
-        return api_json.response_error_not_found("the value is not a valid status")
     #handling one status
     if ',' not in status_value:
+        if status_value not in models.STATUS_CHECK:
+            return api_json.response_error_not_found("the value is not a valid status")
         trackable_people = models.TrackablePerson.objects.filter(status=status_value)
     else:
         #handling multiple statuses
