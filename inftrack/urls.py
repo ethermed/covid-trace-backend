@@ -14,8 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.contrib.auth import login,logout
+from django.urls import path, re_path
+from django.conf.urls import url
+
+import inftrackapp.views as views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    re_path(r'v1/people', views.show_all_people),
+
+    re_path(r'v1/people/(?P<role>[a-zA-Z0-9,]+)/?$', views.show_people_by_role),
+
+    re_path(r'v1/people?status=(?P<status>[A-Z,a-z]{1,12})', views.show_people_by_status),
+
+    re_path(r'v1/status?id=(?P<id>.{1,50})', views.show_person_by_id),
+
+    re_path(r'v1/status?id=(?P<id>.{1,50})&status=(?P<status>[A-Z]{1,12})', views.update_status)
 ]

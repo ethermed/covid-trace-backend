@@ -25,7 +25,7 @@ SECRET_KEY = '#$*=a!_ek0bb%+fb=k4q!8m__(1-5^hbk$2-^fgemkxs_u+&f4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost','api.covidbacktrace.com','18.206.180.37','172.31.40.163']
 
 
 # Application definition
@@ -76,18 +76,8 @@ WSGI_APPLICATION = 'inftrack.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME'      : 'inftrackdb',
-        'USER'      : 'pythonuser',
-        'PASSWORD'  : 'pythonpw',
-        'HOST'      : 'localhost',
-        'PORT'      : '',
+        'ENGINE': 'djongo',
+        'NAME': 'inftracktemp',
     }
 }
 
