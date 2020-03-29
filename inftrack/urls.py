@@ -30,8 +30,8 @@ schema_view = get_swagger_view(title='Swagger API')
 # ]
 
 urlpatterns = [
-    url(r'^$', schema_view),
-        
+    url(r'doc', schema_view),
+
     re_path(r'v1/people', views.show_all_people),
 
     re_path(r'v1/people?role=(?P<role>[A-Z,a-z]{1,12})', views.show_people_by_role),
