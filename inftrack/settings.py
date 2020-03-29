@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'inftrack.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'inftracktemp2',
+        'NAME': 'marctempdb'
     }
 }
 

@@ -176,8 +176,8 @@ class TrackablePerson(EthermedModel):
                 "interaction_event_id": evt.id, 
                 "distance": evt.distance, 
                 "timestamp": evt.timestamp, 
-                "prior_interaction_event_id": evt.prior_interaction_event.id, 
-                "next_interaction_event_id": evt.next_interaction_event.id
+                "prior_interaction_event_id": evt.prior_interaction_event_id, 
+                "next_interaction_event_id": evt.next_interaction_event_id
             }
             response_dict[other_person.unique_id]["interactions"].append(evtinfo)
 
@@ -223,8 +223,8 @@ class TrackablePerson(EthermedModel):
                 "interaction_event_id": evt.id, 
                 "distance": evt.distance, 
                 "timestamp": evt.timestamp, 
-                "prior_interaction_event_id": evt.prior_interaction_event.id, 
-                "next_interaction_event_id": evt.next_interaction_event.id
+                "prior_interaction_event_id": evt.prior_interaction_event_id, 
+                "next_interaction_event_id": evt.next_interaction_event_id
             }
             response_dict[other_person.unique_id]["interactions"].append(evtinfo)
 
@@ -374,7 +374,8 @@ class InteractionEventTagPosition(models.Model):
 class InteractionEvent(models.Model):
     distance = models.FloatField(null=False,blank=False,default=0.0)
     timestamp = models.DateTimeField()
-    prior_interaction_event = models.OneToOneField('self', null=True, blank=True, on_delete=models.SET_NULL,related_name="next_interaction_event")
+    #prior_interaction_event = models.OneToOneField('self', null=True, blank=True, on_delete=models.SET_NULL,related_name="next_interaction_event")
+    prior_interaction_event_id = models.IntegerField(null=False, blank=False,default=0)
 
     @property
     def persons(self):
@@ -389,6 +390,28 @@ class InteractionEvent(models.Model):
         for p in self.persons:
             if p.unique_id != person.unique_id:
                 return p
+
+    @property
+    def prior_interaction_event(self):
+        try:
+            return InteractionEvent.objects.get(id=self.prior_interaction_event_id)
+        except:
+            return None
+
+    @property
+    def next_interaction_event(self):
+        try:
+            return InteractionEvent.objects.get(prior_interaction_event_id = self.id)
+        except:
+            return None
+
+    @property
+    def next_interaction_event_id(self):
+        try:
+            nxtevt = InteractionEvent.objects.get(prior_interaction_event_id = self.id)
+            return nxtevt.id
+        except:
+            return 0 
 
     @property
     def other_tag(self, tag):
