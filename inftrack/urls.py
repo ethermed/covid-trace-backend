@@ -20,7 +20,18 @@ from django.conf.urls import url
 
 import inftrackapp.views as views
 
+from django.conf.urls import url
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Swagger API')
+
+# urlpatterns = [
+    
+# ]
+
 urlpatterns = [
+    url(r'^$', schema_view),
+        
     re_path(r'v1/people', views.show_all_people),
 
     re_path(r'v1/people?role=(?P<role>[A-Z,a-z]{1,12})', views.show_people_by_role),
