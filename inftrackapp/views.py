@@ -20,6 +20,15 @@ from django.contrib.auth.decorators import login_required
 import inftrackapp.models as models
 import inftrackapp.api_json as api_json
 
+from django.conf.urls import url
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Swagger API')
+
+urlpatterns = [
+    url(r'^$', schema_view)
+]
+
 # v1/people
 def show_all_people(request):
     trackable_people = models.TrackablePerson.objects.all()
@@ -145,5 +154,5 @@ def update_status(self, request, *args, **kwargs):
         return api_json.response_success_with_dict(response_dict)
     else:
         return api_json.response_error_not_found("status value is not a valid status")
-
 # v1
+
