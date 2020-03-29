@@ -54,6 +54,7 @@ STATUS_CHOICES = (
     (STATUS_BEING_TESTED, "Being Tested"),
     (STATUS_INFECTED, "Infected")
 )
+STATUS_CHECK = [STATUS_OK, STATUS_AT_RISK, STATUS_BEING_TESTED, STATUS_INFECTED]
 
 ################################################
 # Managers and QuerySet overrides
@@ -100,7 +101,7 @@ class EthermedModel(models.Model):
         abstract = True
 
 ##########################################
-# TrackablePerson 
+# TrackablePerson
 ##########################################
 class TrackablePerson(EthermedModel):
     #
@@ -126,7 +127,7 @@ class TrackablePerson(EthermedModel):
         try:
             tag_assign_event = TagAssignmentEvent.objects.filter(person=self).order_by('-timestamp')[0]
         except Exception as ex:
-            return None 
+            return None
         if tag_assign_event.event_type ==  ASSIGN_EVENT_ASSIGNED:
             return tag_assign_event.tag
         else:
@@ -210,7 +211,7 @@ class StatusChangeEvent(EthermedModel):
     #
     objects = EthermedQueryManager()
 
-    # 
+    #
     # we don't yet have user login so we won't have users but eventually we will need this
     #
     # user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='status_change_events')
@@ -243,7 +244,7 @@ class TagPosition(models.Model):
     x = models.FloatField(null=False,blank=False,default=0.0)
     y = models.FloatField(null=False,blank=False,default=0.0)
     timestamp = models.DateTimeField()
-    
+
     def __str__(self):
         modelName="TagPosition"
         vars=["tag","person","x","y","timestamp"]
@@ -251,6 +252,3 @@ class TagPosition(models.Model):
 
     class Meta:
         db_table = 'ethermed_tag_position'
-
-
-
