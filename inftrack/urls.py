@@ -23,7 +23,7 @@ import inftrackapp.views as views
 urlpatterns = [
     re_path(r'v1/people', views.show_all_people),
 
-    re_path(r'v1/people/(?P<role>[a-zA-Z0-9,]+)/?$', views.show_people_by_role),
+    re_path(r'v1/people/role/(?P<role>[A-Za-z,])/$', views.show_people_by_role),
 
     re_path(r'v1/people?status=(?P<status>[A-Z,a-z]{1,12})', views.show_people_by_status),
 
