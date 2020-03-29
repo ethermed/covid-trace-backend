@@ -151,11 +151,10 @@ def analyze_at_risk(request, identifier):
     trackable_people = models.TrackablePerson.objects.all()
     #increment = random.randrange(10)+1 #random value from 1-10
 
-    risk = round(random.random(), 2) #random float with 2 decimal places from 0.0 to 1.0
-
     people_list = []
     count = 0
     for person in trackable_people:
+        risk = round(random.random(), 2) #random float with 2 decimal places from 0.0 to 1.0
         if count < 10 and person.unique_id != identifier:
             person_dict = {
                 "firstname": person.firstname,
