@@ -17,15 +17,10 @@ from django.contrib import admin
 from django.contrib.auth import login,logout
 from django.urls import path, re_path
 from django.conf.urls import url
-from rest_framework_swagger.views import get_swagger_view
 
 import inftrackapp.views as views
 
-schema_view = get_swagger_view(title='Trace Covid-19')
-
 urlpatterns = [
-
-    url(r'^$', schema_view),
 
     path(r'v1/people/role/<str:role>/', views.show_people_by_role),
 
