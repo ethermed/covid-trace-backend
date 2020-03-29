@@ -132,6 +132,104 @@ class TrackablePerson(EthermedModel):
         else:
             return None
 
+    #
+    # This returns a dictionary of other people and my interactions with them
+    #
+    def get_my_interactions(self,startdate,enddate,reverse_order=False):
+        #
+        # a TagPosition object tagpos.interaction_event_tag_positions gives a list of InteractionEventTagPosition objects for this person
+        # each of these objects has a reference to InteractionEvent
+        # The other person in the interaction event is interaction_event.other_person(person)
+        #
+
+        #
+        # this gives a list of tag_positions where each object has obj.interaction_event_tag_positions filled out
+        #
+        if reverse_order:
+            orderbystr = '-timestamp'
+        else:
+            orderbystr = 'timestamp'
+        #
+        # get a list of my InteractionEvent objects in the specified timeframe
+        #
+        my_events = [obj.interaction_event for obj in InteractionEventTagPosition.objects.\
+                    select_related('interaction_event').\
+                    select_related('tag_position__person').\
+                    filter(tag_position__person=self, timestamp__gte=startdate, timestamp__lte=enddate).\
+                    order_by(orderbystr)]
+
+        response_dict={}
+        for evt in my_events:
+            other_person=evt.other_person
+            if other_person.unique_id not in response_dict:
+                response_dict[other_person.unique_id] = {
+                    "other_person": {
+                        "unique_id": other_person.unique_id,
+                        "name": other_person.firstname + " " + other_person.lastname
+                    },
+                    "interactions": []
+                }
+            #
+            # now the other person is in the output so add the interaction event info to list of interaction events
+            #
+            evtinfo = {
+                "interaction_event_id": evt.id, 
+                "distance": evt.distance, 
+                "timestamp": evt.timestamp, 
+                "prior_interaction_event_id": evt.prior_interaction_event.id, 
+                "next_interaction_event_id": evt.next_interaction_event.id
+            }
+            response_dict[other_person.unique_id]["interactions"].append(evtinfo)
+
+        return response_dict
+
+    #
+    # This returns a dictionary of other people and my interactions with them
+    #
+    def get_my_interactions_with(self,specific_other_person,startdate,enddate,reverse_order=False):
+        #
+        # this gives a list of tag_positions where each object has obj.interaction_event_tag_positions filled out
+        #
+        if reverse_order:
+            orderbystr = '-timestamp'
+        else:
+            orderbystr = 'timestamp'
+        #
+        # get a list of my InteractionEvent objects in the specified timeframe
+        #
+        my_events = [obj.interaction_event for obj in InteractionEventTagPosition.objects.\
+                    select_related('interaction_event').\
+                    select_related('tag_position__person').\
+                    filter(tag_position__person=self, timestamp__gte=startdate, timestamp__lte=enddate).\
+                    order_by(orderbystr)]
+
+
+        response_dict={}
+        for evt in my_events:
+            other_person=evt.other_person
+            if other_person==specific_other_person:
+                if other_person.unique_id not in response_dict:
+                    response_dict[other_person.unique_id] = {
+                        "other_person": {
+                            "unique_id": other_person.unique_id,
+                            "name": other_person.firstname + " " + other_person.lastname
+                        },
+                        "interactions": []
+                    }
+            #
+            # now the other person is in the output so add the interaction event info to list of interaction events
+            #
+            evtinfo = {
+                "interaction_event_id": evt.id, 
+                "distance": evt.distance, 
+                "timestamp": evt.timestamp, 
+                "prior_interaction_event_id": evt.prior_interaction_event.id, 
+                "next_interaction_event_id": evt.next_interaction_event.id
+            }
+            response_dict[other_person.unique_id]["interactions"].append(evtinfo)
+
+        return response_dict
+
     def __str__(self):
         modelName="TrackablePerson"
         vars=["unique_id", "firstname","lastname","phone","email","role","status"]
@@ -252,5 +350,58 @@ class TagPosition(models.Model):
     class Meta:
         db_table = 'ethermed_tag_position'
 
+
+##########################################
+# InteractionEventTagPosition
+# There will be many records of these
+##########################################
+class InteractionEventTagPosition(models.Model):
+    interaction_event = models.ForeignKey('InteractionEvent',null=False,on_delete=models.CASCADE,related_name='interaction_event_tag_positions')
+    tag_position = models.ForeignKey('TagPosition',null=False,on_delete=models.CASCADE,related_name='interaction_event_tag_positions')
+
+    def __str__(self):
+        modelName="InteractionEventPerson"
+        vars=["interaction_event","tag_position"]
+        return self._descr_string(modelName,vars)
+
+    class Meta:
+        db_table = 'ethermed_interaction_event_tag_position'
+
+##########################################
+# InteractionEvent
+# There will be many records of these
+##########################################
+class InteractionEvent(models.Model):
+    distance = models.FloatField(null=False,blank=False,default=0.0)
+    timestamp = models.DateTimeField()
+    prior_interaction_event = models.OneToOneField('self', null=True, blank=True, on_delete=models.SET_NULL,related_name="next_interaction_event")
+
+    @property
+    def persons(self):
+        return [tag_position.person for tag_position in self.interaction_event_tag_positions.all()]
+
+    @property
+    def tags(self):
+        return [tag_position.tag for tag_position in self.interaction_event_tag_positions.all()]
+
+    @property
+    def other_person(self, person):
+        for p in self.persons:
+            if p.unique_id != person.unique_id:
+                return p
+
+    @property
+    def other_tag(self, tag):
+        for t in self.tags:
+            if t.unique_id != t.unique_id:
+                return t
+
+    def __str__(self):
+        modelName="InteractionEvent"
+        vars=["distance","timestamp","prior_interaction_event_id"]
+        return self._descr_string(modelName,vars)
+
+    class Meta:
+        db_table = 'ethermed_interaction_event'
 
 
