@@ -48,6 +48,7 @@ def show_people_by_role(request, role):
     else:
         #handling multiple roles
         roles = role_value.split(",")
+        return api_json.response_error_not_found(roles)
         trackable_people = models.TrackablePerson.objects.filter(reduce(or_, [Q(role__icontains=role) for role in roles]))
 
     if trackable_people is None:
