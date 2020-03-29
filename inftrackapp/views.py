@@ -65,7 +65,7 @@ def show_people_by_role(self, request, *args, **kwargs):
             "email": person.email
         }
         people_list.append(person_dict)
-    return api_json.response_success_with_list(people_list)
+    return api_json.response_success_with_list(role_value)
 
 # v1/people?status=ok
 # v1/people?status=at-risk,being-tested
