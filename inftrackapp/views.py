@@ -131,7 +131,7 @@ def update_status(request, status, identifier):
     status_update = status
 
     #checking to see if the new status value is a valid status
-    if status_update in STATUS_CHOICES:
+    if status_update in models.STATUS_CHOICES:
         setattr(updated_person,"status",status_update)
         updated_person.save()
         response_dict = {
