@@ -50,7 +50,7 @@ def show_people_by_role(request, role):
         roles = role_value.split(",")
         trackable_people = models.TrackablePerson.objects.filter(role__in=roles)
 
-    if len(trackable_people) is None:
+    if len(trackable_people) == 0:
         return api_json.response_error_not_found("no person with the specified role is in our system")
 
     people_list = []
@@ -80,7 +80,7 @@ def show_people_by_status(request, status):
         statuses = status_value.split(",")
         trackable_people = models.TrackablePerson.objects.filter(status__in=statuses)
 
-    if len(trackable_people) is None:
+    if len(trackable_people) == 0:
         return api_json.response_error_not_found("no person with the specified status is in our system")
 
     people_list = []
