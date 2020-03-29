@@ -39,9 +39,9 @@ def show_all_people(request):
 
 # v1/people?role=doctor
 # v1/people?role=doctor,nurse,patient
-def show_people_by_role(self, request, *args, **kwargs):
+def show_people_by_role(request, role):
     #comma delimited roles or one role
-    role_value = kwargs["role"]
+    role_value = role
     #handling one role
     if ',' not in role_value:
         trackable_people = models.TrackablePerson.objects.filter(role=role_value)
@@ -65,7 +65,7 @@ def show_people_by_role(self, request, *args, **kwargs):
             "email": person.email
         }
         people_list.append(person_dict)
-    return api_json.response_success_with_list(role_value)
+    return api_json.response_success_with_list(people_list)
 
 # v1/people?status=ok
 # v1/people?status=at-risk,being-tested
