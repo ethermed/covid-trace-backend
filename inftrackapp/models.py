@@ -123,7 +123,10 @@ class TrackablePerson(EthermedModel):
     #
     @property
     def current_tag(self):
-        tag_assign_event = TagAssignmentEvent.objects.filter(person=self).order_by('-timestamp')[0]
+        try:
+            tag_assign_event = TagAssignmentEvent.objects.filter(person=self).order_by('-timestamp')[0]
+        except Exception as ex:
+            return None 
         if tag_assign_event.event_type ==  ASSIGN_EVENT_ASSIGNED:
             return tag_assign_event.tag
         else:
@@ -154,7 +157,10 @@ class TrackingTag(EthermedModel):
     #
     @property
     def current_person(self):
-        tag_assign_event = TagAssignmentEvent.objects.filter(tag=self).order_by('-timestamp')[0]
+        try:
+            tag_assign_event = TagAssignmentEvent.objects.filter(tag=self).order_by('-timestamp')[0]
+        except Exception as ex:
+            return None
         if tag_assign_event.event_type ==  ASSIGN_EVENT_ASSIGNED:
             return tag_assign_event.person
         else:
@@ -177,8 +183,8 @@ class TagAssignmentEvent(EthermedModel):
     #
     objects = EthermedQueryManager()
 
-    person = models.ForeignKey('TrackablePerson',null=False,on_delete=models.CASCADE,related_name='tag_assignments')
-    tag = models.ForeignKey('TrackingTag',null=False,on_delete=models.CASCADE,related_name='tag_assignments')
+    person = models.ForeignKey('TrackablePerson',null=False,on_delete=models.CASCADE,related_name='tag_assignment_events')
+    tag = models.ForeignKey('TrackingTag',null=False,on_delete=models.CASCADE,related_name='tag_assignment_events')
     event_type =  models.CharField(max_length=16,null=False,blank=False,choices=ASSIGN_EVENT_CHOICES)
     timestamp = models.DateTimeField()
 
