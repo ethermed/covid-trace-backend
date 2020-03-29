@@ -69,9 +69,9 @@ def show_people_by_role(request, role):
 
 # v1/people?status=ok
 # v1/people?status=at-risk,being-tested
-def show_people_by_status(self, request, *args, **kwargs):
+def show_people_by_status(request, status):
     #comma delimited statuses or one statuses
-    status_value = kwargs["status"]
+    status_value = status
     #handling one status
     if ',' not in status_value:
         trackable_people = models.TrackablePerson.objects.filter(status=status_value)
@@ -98,8 +98,8 @@ def show_people_by_status(self, request, *args, **kwargs):
     return api_json.response_success_with_list(people_list)
 
 # v1/status?id=123
-def show_person_by_id(self, request, *args, **kwargs):
-    id = kwargs["id"]
+def show_person_by_id(request, identifier):
+    id = identifier
     trackable_people = models.TrackablePerson.objects.filter(unique_id=id)
 
     if trackable_people is None:
@@ -119,16 +119,16 @@ def show_person_by_id(self, request, *args, **kwargs):
     return api_json.response_success_with_list(people_list)
 
 # v1/status?id=123&status=ok
-def update_status(self, request, *args, **kwargs):
+def update_status(request, status, identifier):
     #get the user with id
-    updated_persons = models.TrackablePerson.objects.filter(unique_id=kwargs["id"])
+    updated_persons = models.TrackablePerson.objects.filter(unique_id=identifier)
     updated_person = updated_persons[0]
 
     if updated_person is None:
         return api_json.response_error_not_found("no person with specified id in our system")
 
     #fetching new status value
-    status_update = kwargs["status"]
+    status_update = status
 
     #checking to see if the new status value is a valid status
     if status_update in STATUS_CHOICES:
