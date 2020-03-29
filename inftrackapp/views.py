@@ -141,8 +141,9 @@ def update_status(self, request, *args, **kwargs):
             "role": updated_person.role,
             "status": updated_person.status,
             "phone": updated_person.phone,
-            "email": updated_person.email
-        }
+            "email": updated_person.email }
         return api_json.response_success_with_dict(response_dict)
     else:
         return api_json.response_error_not_found("status value is not a valid status")
+
+# v1
