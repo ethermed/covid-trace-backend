@@ -26,9 +26,9 @@ urlpatterns = [
 
     path(r'v1/people/status/<str:status>/', views.show_people_by_status),
 
-    path(r'v1/people', views.show_all_people),
+    path(r'v1/people/id/<str:identifier>', views.show_person_by_id),
 
-    path(r'v1/status/id/<str:identifier>', views.show_person_by_id),
+    path(r'v1/people', views.show_all_people),
 
     path(r'v1/status/<str:status>/id/<str:identifier>/', views.update_status)
 ]
