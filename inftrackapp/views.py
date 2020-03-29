@@ -45,7 +45,7 @@ def show_people_by_role(request, role):
 
     if role_value not in models.ROLE_CHECK:
         return api_json.response_error_not_found("the value is not a valid role")
-        
+
     #handling one role
     if ',' not in role_value:
         trackable_people = models.TrackablePerson.objects.filter(role=role_value)
@@ -116,8 +116,7 @@ def show_person_by_id(request, identifier):
             "phone": person.phone,
             "email": person.email
         }
-        people_list.append(person_dict)
-    return api_json.response_success_with_list(people_list)
+    return api_json.response_success_with_dict(person_dict)
 
 # v1/status?id=123&status=ok
 def update_status(request, status, identifier):
