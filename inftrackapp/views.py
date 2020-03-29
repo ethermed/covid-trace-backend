@@ -78,7 +78,7 @@ def show_people_by_status(request, status):
     else:
         #handling multiple statuses
         statuses = status_value.split(",")
-        trackable_people = models.TrackablePerson.objects.filter(reduce(or_, [Q(status__icontains=status) for status in statuses]))
+        trackable_people = models.TrackablePerson.objects.filter(status__in=statuses)
 
     if trackable_people is None:
         return api_json.response_error_not_found("no person with the specified status is in our system")
