@@ -16,16 +16,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from rest_framework_swagger.views import get_swagger_view
 
 import inftrackapp.models as models
 import inftrackapp.api_json as api_json
-
-schema_view = get_swagger_view(title='Trace Covid-19')
-
-urlpatterns = [
-    url(r'^$', schema_view)
-]
 
 # v1/people
 def show_all_people(request):
