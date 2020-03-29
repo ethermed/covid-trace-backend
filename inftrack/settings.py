@@ -80,16 +80,6 @@ DATABASES = {
         'NAME': 'inftracktemp',
     }
 }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME'      : 'inftrackdb',
-        'USER'      : 'pythonuser',
-        'PASSWORD'  : 'pythonpw',
-        'HOST'      : 'localhost',
-        'PORT'      : '',
-    }
-}
 
 
 
