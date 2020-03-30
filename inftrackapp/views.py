@@ -180,7 +180,7 @@ def analyze_at_risk_details(request):
         hour = random.randrange(0,23)
         min = random.randrange(0,59)
 
-        starttime = "2020-"+month+"-"+day+" "+hour+":"+min+":00.000000"
+        starttime = "2020-"+str(month)+"-"+str(day)+" "+str(hour)+":"+str(min)+":00.000000"
 
         increment = random.randrange(1,15)
 
@@ -190,7 +190,7 @@ def analyze_at_risk_details(request):
         else:
             min = min + increment
 
-        endtime = "2020-"+month+"-"+day+" "+hour+":"+min+":00.000000"
+        endtime = "2020-"+str(month)+"-"+str(day)+" "+str(hour)+":"+str(min)+":00.000000"
 
         result_dict = {
             "starttime": starttime,
