@@ -100,7 +100,7 @@ def show_people_by_status(request, status):
 
 # v1/status?id=123
 def show_person_by_id(request, identifier):
-    trackable_people = models.TrackablePerson.objects.get_or_none(unique_id=identifier)
+    trackable_people = models.TrackablePerson.objects.filter(unique_id=identifier)
     if trackable_people is not None:
         person = trackable_people[0]
 
