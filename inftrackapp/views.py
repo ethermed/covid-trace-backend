@@ -100,8 +100,8 @@ def show_people_by_status(request, status):
 
 # v1/status?id=123
 def show_person_by_id(request, identifier):
-    trackable_people = models.TrackablePerson.objects.filter(unique_id=identifier)
-    if trackable_people is not None:
+    try:
+        trackable_people = models.TrackablePerson.objects.filter(unique_id=identifier)
         person = trackable_people[0]
 
         person_dict = {
@@ -114,7 +114,7 @@ def show_person_by_id(request, identifier):
             "email": person.email
         }
         return api_json.response_success_with_dict(person_dict)
-    else:
+    except:
         return api_json.response_error_not_found("no person with specified id")
 
 # v1/status?id=123&status=ok
