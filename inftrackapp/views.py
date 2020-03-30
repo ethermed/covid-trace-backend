@@ -100,13 +100,10 @@ def show_people_by_status(request, status):
 
 # v1/status?id=123
 def show_person_by_id(request, identifier):
-    id = identifier
-    trackable_people = models.TrackablePerson.objects.filter(unique_id=id)
+    trackable_people = models.TrackablePerson.objects.get_or_none(unique_id=identifier)
+    if trackable_people is not None:
+        person = trackable_people[0]
 
-    if trackable_people is None:
-        return api_json.response_error_not_found("no person with specified id in our system")
-
-    for person in trackable_people:
         person_dict = {
             "firstname": person.firstname,
             "lastname": person.lastname,
@@ -116,7 +113,9 @@ def show_person_by_id(request, identifier):
             "phone": person.phone,
             "email": person.email
         }
-    return api_json.response_success_with_dict(person_dict)
+        return api_json.response_success_with_dict(person_dict)
+    else:
+        return api_json.response_error_not_found("no person with specified id")
 
 # v1/status?id=123&status=ok
 def update_status(request, status, identifier):
