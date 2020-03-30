@@ -32,5 +32,7 @@ urlpatterns = [
 
     path(r'v1/status/<str:status>/id/<str:identifier>/', views.update_status),
 
-    path(r'v1/analyze-at-risk/id/<str:identifier>/', views.analyze_at_risk)
+    path(r'v1/analyze-at-risk/id/<str:identifier>/', views.analyze_at_risk),
+
+    path(r'v1/analyze-at-risk-details', views.analyze_at_risk_details)
 ]

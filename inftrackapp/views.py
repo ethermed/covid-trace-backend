@@ -168,3 +168,35 @@ def analyze_at_risk(request, identifier):
         index += 1
 
     return api_json.response_success_with_list(people_list)
+
+def analyze_at_risk_details(request):
+    amount = random.randrange(10)+1 #how many results
+    zone = "break room"
+
+    result_list = []
+    for i in range(amount):
+        month = random.randrange(3,12)
+        day = random.randrange(1,29)
+        hour = random.randrange(0,23)
+        min = random.randrange(0,59)
+
+        starttime = "2020-"+month+"-"+day+" "+hour+":"+min+":00.000000"
+
+        increment = random.randrange(1,15)
+
+        if min + increment >= 60:
+            min = min + increment - 60
+            hour += 1
+        else:
+            min = min + increment
+
+        endtime = "2020-"+month+"-"+day+" "+hour+":"+min+":00.000000"
+
+        result_dict = {
+            "starttime": starttime,
+            "endtime": endtime,
+            "zone": zone
+        }
+        result_list.append(result_dict)
+
+    return api_json.response_success_with_list(result_list)
